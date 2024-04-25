@@ -1,2 +1,2 @@
 # toxic-comment_detection
-Using DistilBERT to detect toxic comments in a Telegram chat
+Using distilBERT to detect toxic comments (nsfw, hate speech, and bullying) in a Telegram chat
