@@ -41,6 +41,12 @@ def message_handler(update: Update, context: CallbackContext):
     if str_prediction != "This message was approved":
         message.text = str_prediction
         edit(update, context, str_prediction)
+    
+    # Check for image or audio
+    if message.photo or message.audio:
+        message.delete()
+        print(f"Deleted {message.content_type} message")
+        return # Skip further processing for this message
 
     # Print the message to the console
     print(message.text)
