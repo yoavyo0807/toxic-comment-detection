@@ -26,12 +26,14 @@ def message_handler(update: Update, context: CallbackContext):
     print("message.audio: ")
     print(message.audio)
     if message.photo or message.audio:
+        print(f"Found {message.content_type} message, deleting...")
         message.delete()
         str_not_allowed_data_type = f"Deleted {message.content_type} message"
         print(str_not_allowed_data_type)
         context.bot.send_message(chat_id=update.message.chat_id,
                                  text=str_not_allowed_data_type)
 
+        print(f"Deletion successful for {message.message_id}")
         return # Skip further processing for this message
 
     str_prediction = model_wrapper.predict(message.text)
