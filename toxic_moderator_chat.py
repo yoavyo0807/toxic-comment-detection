@@ -37,16 +37,17 @@ def message_handler(update: Update, context: CallbackContext):
     print(context)
     print("---")
     message = update.message
-    str_prediction = model_wrapper.predict(message.text)
-    if str_prediction != "This message was approved":
-        message.text = str_prediction
-        edit(update, context, str_prediction)
-    
+
     # Check for image or audio
     if message.photo or message.audio:
         message.delete()
         print(f"Deleted {message.content_type} message")
         return # Skip further processing for this message
+    
+    str_prediction = model_wrapper.predict(message.text)
+    if str_prediction != "This message was approved":
+        message.text = str_prediction
+        edit(update, context, str_prediction)
 
     # Print the message to the console
     print(message.text)
