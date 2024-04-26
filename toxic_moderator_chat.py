@@ -40,8 +40,9 @@ def message_handler(update: Update, context: CallbackContext):
 
     # Check for image or audio
     if message.photo or message.audio:
+        print(f"Found {message.content_type} message, deleting...")
         message.delete()
-        print(f"Deleted {message.content_type} message")
+        print(f"Deletion successful for {message.message_id}")
         return # Skip further processing for this message
     
     str_prediction = model_wrapper.predict(message.text)
