@@ -47,7 +47,7 @@ def message_handler(update: Update, context: CallbackContext):
 
 
 def main() -> None:
-    updater = Updater("6983089788:AAEjUsaehsFtqWrCrfhCT42gksqcKCFJwt0", use_context=True)
+    updater = Updater("TOKEN", use_context=True)
     # updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('edit', edit))
     updater.dispatcher.add_handler(MessageHandler(Filters.text, message_handler))
