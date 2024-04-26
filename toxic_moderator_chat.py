@@ -16,25 +16,9 @@ def get_full_name(message):
 
 
 # Define a function to handle the messages that the bot receives
-def message_handler(update: Update, context: CallbackContext):
+def text_handler(update: Update, context: CallbackContext):
     # Get the message from the update
     message = update.message
-
-    # Check for image or audio
-    print("message.photo: ")
-    print(message.photo)
-    print("message.audio: ")
-    print(message.audio)
-    if message.photo or message.audio:
-        print(f"Found {message.content_type} message, deleting...")
-        message.delete()
-        str_not_allowed_data_type = f"Deleted {message.content_type} message"
-        print(str_not_allowed_data_type)
-        context.bot.send_message(chat_id=update.message.chat_id,
-                                 text=str_not_allowed_data_type)
-
-        print(f"Deletion successful for {message.message_id}")
-        return # Skip further processing for this message
 
     str_prediction = model_wrapper.predict(message.text)
     if str_prediction != "This message was approved":
@@ -43,16 +27,52 @@ def message_handler(update: Update, context: CallbackContext):
         message.delete()
         context.bot.send_message(chat_id=update.message.chat_id,
                                  text=str_prediction)
-        print(str_prediction)
         return
 
-    # Print the message to the console
-    print(message.text)
+
+def photo_handler(update: Update, context: CallbackContext):
+    message = update.message
+    full_name = get_full_name(message)
+    output_str = f"{full_name}: Pictures are not allowed"
+    message.delete()
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text=output_str)
+
+
+def video_handler(update: Update, context: CallbackContext):
+    message = update.message
+    full_name = get_full_name(message)
+    output_str = f"{full_name}: Videos are not allowed"
+    message.delete()
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text=output_str)
+
+
+def audio_handler(update: Update, context: CallbackContext):
+    message = update.message
+    full_name = get_full_name(message)
+    output_str = f"{full_name}: Audio is not allowed"
+    message.delete()
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text=output_str)
+
+
+def voice_handler(update: Update, context: CallbackContext):
+    message = update.message
+    full_name = get_full_name(message)
+    output_str = f"{full_name}: Voice is not allowed"
+    message.delete()
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text=output_str)
 
 
 def main() -> None:
-    updater = Updater("TOKEN", use_context=True)
-    updater.dispatcher.add_handler(MessageHandler(Filters.text, message_handler))
+    updater = Updater("6983089788:AAEjUsaehsFtqWrCrfhCT42gksqcKCFJwt0", use_context=True)
+    updater.dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
+    updater.dispatcher.add_handler(MessageHandler(Filters.photo, photo_handler))
+    updater.dispatcher.add_handler(MessageHandler(Filters.video, video_handler))
+    updater.dispatcher.add_handler(MessageHandler(Filters.audio, audio_handler))
+    updater.dispatcher.add_handler(MessageHandler(Filters.voice, voice_handler))
     updater.start_polling()
     updater.idle()
 
