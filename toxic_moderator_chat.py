@@ -3,7 +3,7 @@ import telegram
 
 
 async def main():
-    bot = telegram.Bot("6983089788:AAEjUsaehsFtqWrCrfhCT42gksqcKCFJwt0")
+    bot = telegram.Bot("TOKEN")
     async with bot:
         print(await bot.get_me())
         updates = (await bot.get_updates())[0]
