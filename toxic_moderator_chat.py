@@ -67,7 +67,7 @@ def voice_handler(update: Update, context: CallbackContext):
 
 
 def main() -> None:
-    updater = Updater("6983089788:AAEjUsaehsFtqWrCrfhCT42gksqcKCFJwt0", use_context=True)
+    updater = Updater("TOKEN", use_context=True)
     updater.dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
     updater.dispatcher.add_handler(MessageHandler(Filters.photo, photo_handler))
     updater.dispatcher.add_handler(MessageHandler(Filters.video, video_handler))
