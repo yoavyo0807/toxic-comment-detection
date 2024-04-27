@@ -1,27 +1,34 @@
 import torch
 import lightning as L
-from transformers import DistilBertTokenizer, DistilBertModel
+# from transformers import DistilBertTokenizer, DistilBertModel
 from torchmetrics.classification import MultilabelF1Score, MultilabelAUROC
 import torch.nn as nn
 import numpy as np
+from transformers import AutoModel, AutoTokenizer
+from pickle import load
 
-
-model_name = 'distilbert-base-uncased'
-model_path = "model_wrapper.ckpt"
+user_name_hugging_face = "borodache"
+model_name_hugging_face = "distilBERT_toxic_detector"
+# model_name = 'distilbert-base-uncased'
+# model_path = "model_wrapper.ckpt"
 LABEL_COLUMNS = ["nsfw", "hate_speech", "bullying"]
 n_labels = len(LABEL_COLUMNS)
 learning_rate = 1e-5
 
 
 class MultiLabelDetectionModel(L.LightningModule):
-    def __init__(self, model_name=model_name, n_labels = n_labels):
+    def __init__(self, model_name=model_name_hugging_face, n_labels = n_labels):
         # print("I am in MultiLabelDetectionModel.__init__")
         super().__init__()
         self.save_hyperparameters()
         self.n_labels = n_labels
-        self.tokenizer = DistilBertTokenizer.from_pretrained(model_name)
-        self.model = DistilBertModel.from_pretrained(model_name)
-        self.classifier = nn.Linear(self.model.config.hidden_size, n_labels)
+        self.tokenizer = AutoTokenizer.from_pretrained(f"{user_name_hugging_face}/{model_name}",
+                                                       token="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")
+        self.model = AutoModel.from_pretrained(f"{user_name_hugging_face}/{model_name}",
+                                          token="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")
+        # self.classifier = nn.Linear(self.model.config.hidden_size, n_labels)
+        with open("top_layer_classifier.pkl", 'rb') as pickle_file:
+            self.classifier = load(pickle_file)
         self.criterion = nn.BCEWithLogitsLoss()
         self.auroc = MultilabelAUROC(n_labels)
         self.multi_label_f1 = MultilabelF1Score(n_labels)
@@ -179,7 +186,7 @@ class MultiLabelDetectionModel(L.LightningModule):
         return optimizer
 
 
-def load_model():
-    model_wrapper = torch.load(model_path, map_location=torch.device('cpu'))
+def load_model_wrapper():
+    model_wrapper = MultiLabelDetectionModel()
 
     return model_wrapper
