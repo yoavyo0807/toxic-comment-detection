@@ -183,7 +183,3 @@ def load_model():
     model_wrapper = torch.load(model_path, map_location=torch.device('cpu'))
 
     return model_wrapper
-# print(model_wrapper.predict("I love every one!"))
-# print(model_wrapper.predict("I hate every one!"))
-# print(model_wrapper.predict("I hate Gypsies!"))
-
