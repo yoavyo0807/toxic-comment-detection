@@ -9,11 +9,10 @@ from pickle import load
 
 user_name_hugging_face = "borodache"
 model_name_hugging_face = "distilBERT_toxic_detector"
-# model_name = 'distilbert-base-uncased'
-# model_path = "model_wrapper.ckpt"
 LABEL_COLUMNS = ["nsfw", "hate_speech", "bullying"]
 n_labels = len(LABEL_COLUMNS)
 learning_rate = 1e-5
+token_huggingface = "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"
 
 
 class MultiLabelDetectionModel(L.LightningModule):
@@ -23,9 +22,9 @@ class MultiLabelDetectionModel(L.LightningModule):
         self.save_hyperparameters()
         self.n_labels = n_labels
         self.tokenizer = AutoTokenizer.from_pretrained(f"{user_name_hugging_face}/{model_name}",
-                                                       token="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")
+                                                       token=token_huggingface)
         self.model = AutoModel.from_pretrained(f"{user_name_hugging_face}/{model_name}",
-                                          token="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")
+                                               token=token_huggingface)
         # self.classifier = nn.Linear(self.model.config.hidden_size, n_labels)
         with open("top_layer_classifier.pkl", 'rb') as pickle_file:
             self.classifier = load(pickle_file)

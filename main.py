@@ -3,6 +3,8 @@ from telegram import Update
 from model_wrapper_loader import MultiLabelDetectionModel, load_model_wrapper
 
 model_wrapper = load_model_wrapper()
+token_bot = "6983089788:AAEjUsaehsFtqWrCrfhCT42gksqcKCFJwt0"
+
 
 
 def get_full_name(message):
@@ -66,7 +68,7 @@ def voice_handler(update: Update, context: CallbackContext):
 
 
 def main() -> None:
-    updater = Updater("6983089788:AAEjUsaehsFtqWrCrfhCT42gksqcKCFJwt0", use_context=True)
+    updater = Updater(token_bot, use_context=True)
     updater.dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
     updater.dispatcher.add_handler(MessageHandler(Filters.photo, photo_handler))
     updater.dispatcher.add_handler(MessageHandler(Filters.video, video_handler))
